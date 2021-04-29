@@ -1,19 +1,34 @@
 version: "2"
+networks:
+  # This special network is configured so that the local metadata
+  # service can bind to the specific IP address that ECS uses
+  # in production
+  credentials_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "169.254.170.0/24"
+          gateway: 169.254.170.1
 
 services:
   app:
     user: root
+    # We run as root locally to avoid access denied errors on the volume mounts,
+    # production uses 'jenkins' user
     ports:
       - 8080:8080
     build:
+      # Build an image from the Dockerfile in the current directory
       context: .
-      dockerfile: images/master/Dockerfile
+      dockerfile: Dockerfile
+    networks:
+      credentials_network:
+        ipv4_address: "169.254.170.3"
     environment:
       DOCKER_COMPOSE: "1"
-      AWS_DEFAULT_REGION: "us-east-1"
-      AWS_REGION: "us-east-1"
-      JENKINS_URL: "http://localhost:8080"
-      ADMIN_ADDRESS: "jenkins@trambo.cloud"
+      AWS_DEFAULT_REGION: "us-west-2"
+      AWS_REGION: "us-west-2"
+      JENKINS_URL: "http://169.254.170.3:8080"
+      ADMIN_ADDRESS: "jenkins@example.com"
     volumes:
-      - "./jobs:/var/jenkins_home/workspace/seed-job/jenkins/jobs/"
       - "/var/run/docker.sock:/var/run/docker.sock"

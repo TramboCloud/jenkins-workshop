@@ -1,0 +1,35 @@
+jenkins:
+  authorizationStrategy:
+    roleBased:
+      roles:
+        global:
+          - name: "admin"
+            description: "Jenkins administrators"
+            permissions:
+              - "Overall/Administer"
+            assignments:
+              - "admin"
+              - "yewno-jenkins-admin"
+          - name: "readonly"
+            description: "Read-only users"
+            permissions:
+              - "Overall/Read"
+              - "Job/Read"
+            assignments:
+              - "yewno-jenkins-readonly"
+              - "reader"
+          - name: "builders"
+            description: "Builder users"
+            permissions:
+              - "Overall/Read"
+              - "Job/Read"
+              - "Job/Build"
+              - "Job/Cancel"
+              - "Job/Discover"
+              - "Job/Workspace"
+              - "Run/Update"
+              - "Run/Artifacts"
+              - "Agent/Build"
+            assignments:
+              - "yewno-jenkins-builder"
+              - "builder"

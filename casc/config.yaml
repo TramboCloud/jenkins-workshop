@@ -1,0 +1,4 @@
+unclassified:
+  location:
+    adminAddress: ${ADMIN_ADDRESS}
+    url: ${JENKINS_URL}

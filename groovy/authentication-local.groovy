@@ -4,11 +4,12 @@ import hudson.plugins.active_directory.*
 
 def jenkins = Jenkins.instance
 
-println "Jenkins database auth"
-def jenkins_username = "admin"
-def jenkins_password = "admin"
-def hudsonRealm = new HudsonPrivateSecurityRealm(false)
-hudsonRealm.createAccount(jenkins_username,jenkins_password)
-jenkins.instance.setSecurityRealm(hudsonRealm)
-jenkins.save()
-
+if( System.getenv('DOCKER_COMPOSE') ){
+  println "Jenkins database auth"
+  def hudsonRealm = new HudsonPrivateSecurityRealm(false)
+  hudsonRealm.createAccount("admin","admin")
+  hudsonRealm.createAccount('builder',"builder")
+  hudsonRealm.createAccount('reader',"reader")
+  jenkins.instance.setSecurityRealm(hudsonRealm)
+  jenkins.save()
+}

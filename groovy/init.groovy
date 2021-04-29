@@ -13,6 +13,7 @@ import hudson.tasks.Maven.MavenInstallation;
 import hudson.tools.*;
 import hudson.util.DescribableList;
 
+def loader = new GroovyClassLoader(getClass().getClassLoader())
 def jenkinsLocationConfiguration = JenkinsLocationConfiguration.get()
 def jenkins_Url = System.getenv("JENKINS_URL")
 def adminAddress = System.getenv("ADMIN_ADDRESS")
@@ -22,11 +23,6 @@ if ( jenkins_Url == null)
 
 if ( adminAddress == null)
   throw new Exception("ADMIN_ADDRESS needs to be set")
-
-
-jenkinsLocationConfiguration.setAdminAddress(adminAddress)
-jenkinsLocationConfiguration.setUrl(jenkins_Url)
-jenkinsLocationConfiguration.save()
 
 Jenkins.instance.injector.getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false);
 Jenkins.instance.save()
@@ -45,4 +41,3 @@ def installation = new MavenInstallation("maven3", "", proplist)
 
 mavenDesc.setInstallations(installation)
 mavenDesc.save()
-
