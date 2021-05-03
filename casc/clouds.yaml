@@ -1,0 +1,25 @@
+jenkins:
+  clouds:
+  - ecs:
+      cluster: arn:aws:ecs:us-west-2:695292474035:cluster/devtodevops-jenkins-demo
+      credentialsId: ""
+      jenkinsUrl: devtodevops-jenkins-demo-2123183621.us-west-2.elb.amazonaws.com
+      name: "ECS_WORKER_DEFAULT"
+      regionName: us-west-2
+      templates:
+      - templateName: "default"
+        label: "default-worker"
+        memory: 1500
+        cpu: 512
+        image: 695292474035.dkr.ecr.us-west-2.amazonaws.com/jenkins-ecr:base
+        launchType: "EC2"
+        networkMode: "default"
+        privileged: false
+        remoteFSRoot: "/home/jenkins"
+        containerUser: root
+        taskrole: "arn:aws:iam::695292474035:role/devtodevops-jenkins-ecs-task-demo"
+        mountPoints:
+        - containerPath: "/var/run/docker.sock"
+          name: "dockersocket"
+          readOnly: false
+          sourcePath: "/var/run/docker.sock"

@@ -13,7 +13,7 @@ build-pipeline-plugin:1.5.8
 build-timeout
 cobertura
 config-file-provider
-configuration-as-code:1.47
+configuration-as-code:1.49
 configuration-as-code-secret-ssm:1.0.1
 copyartifact
 description-setter
